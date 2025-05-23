@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Domain
+﻿namespace Domain
 {
     public class Bureau: Entity
     {
@@ -16,6 +10,7 @@ namespace Domain
         }
         public string Name { get; set; }
         public int Number { get; set; }
+        public int? NombreDePlaces { get; set; }
         public int EtageId { get; set; }
         public Etage Etage { get; set; }
     }

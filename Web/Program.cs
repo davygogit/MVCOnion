@@ -1,4 +1,7 @@
+using Domain.Repository;
+using Domain;
 using Infrastructure;
+using Infrastructure.Repository;
 using Microsoft.EntityFrameworkCore;
 
 namespace Web
@@ -14,6 +17,8 @@ namespace Web
 
             builder.Services.AddDbContext<MVCOnionContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'MVCOnionContext' not found.")));
 
+            builder.Services.AddScoped<IRepository<Bureau>, Repository<Bureau>>();
+            builder.Services.AddScoped<IRepository<Etage>, Repository<Etage>>();
 
             var app = builder.Build();
 
