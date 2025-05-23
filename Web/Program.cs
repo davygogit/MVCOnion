@@ -1,3 +1,6 @@
+using Infrastructure;
+using Microsoft.EntityFrameworkCore;
+
 namespace Web
 {
     public class Program
@@ -8,6 +11,9 @@ namespace Web
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
+
+            builder.Services.AddDbContext<MVCOnionContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'MVCOnionContext' not found.")));
+
 
             var app = builder.Build();
 
