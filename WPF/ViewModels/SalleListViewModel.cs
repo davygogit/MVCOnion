@@ -86,6 +86,7 @@ namespace WPF.ViewModels
 
         public ICommand LoadDataCommand { get; }
         public ICommand ToggleFavoriCommand { get; }
+        public ICommand EditSalleCommand { get; }
         public ICommand DeleteSalleCommand { get; }
         public ICommand ResetFiltersCommand { get; }
         public ICommand ShowDetailsCommand { get; }
@@ -103,6 +104,7 @@ namespace WPF.ViewModels
 
             LoadDataCommand = new AsyncRelayCommand(LoadDataAsync);
             ToggleFavoriCommand = new AsyncRelayCommand<Salle>(ToggleFavoriAsync);
+            EditSalleCommand = new RelayCommand<Salle>(EditSalle);
             DeleteSalleCommand = new AsyncRelayCommand<Salle>(DeleteSalleAsync);
             ResetFiltersCommand = new RelayCommand(ResetFilters);
             ShowDetailsCommand = new RelayCommand<Salle>(ShowDetails);
@@ -216,6 +218,42 @@ namespace WPF.ViewModels
             SearchText = string.Empty;
             SelectedEtage = null;
             SelectedTypeSalle = null;
+        }
+
+        private void EditSalle(Salle? salle)
+        {
+            if (salle == null) return;
+
+            try
+            {
+                // Obtenir IImageService via le service provider
+                var imageService = App.GetService<IImageService>();
+
+                // Créer le ViewModel pour l'édition
+                var editViewModel = new EditSalleViewModel(
+                    _salleRepository,
+                    _etageRepository,
+                    _dialogService,
+                    imageService,
+                    salle
+                );
+
+                // Créer et afficher la fenêtre modale
+                var editWindow = new Windows.EditSalleWindow(editViewModel)
+                {
+                    Owner = System.Windows.Application.Current.MainWindow
+                };
+
+                if (editWindow.ShowDialog() == true)
+                {
+                    // Recharger les données après modification
+                    _ = LoadDataAsync();
+                }
+            }
+            catch (Exception ex)
+            {
+                _dialogService.ShowError("Erreur", $"Erreur lors de l'ouverture de l'éditeur: {ex.Message}");
+            }
         }
 
         private void ShowDetails(Salle? salle)

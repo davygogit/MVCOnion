@@ -191,6 +191,14 @@
                                            FontSize="18"
                                            ToolTip="Favori"/>
                                     
+                                    <Button Content="✏️"
+                                           Command="{Binding DataContext.EditSalleCommand, 
+                                                    RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                           CommandParameter="{Binding}"
+                                           Style="{StaticResource IconButtonStyle}"
+                                           FontSize="18"
+                                           ToolTip="Modifier"/>
+                                    
                                     <Button Content="ℹ️"
                                            Command="{Binding DataContext.ShowDetailsCommand, 
                                                     RelativeSource={RelativeSource AncestorType=UserControl}}"
