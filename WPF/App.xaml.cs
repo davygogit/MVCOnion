@@ -39,6 +39,7 @@ namespace WPF
 
                     // Services métier (Business Logic Layer)
                     services.AddScoped<IEtageService, EtageService>();
+                    services.AddScoped<ISalleService, SalleService>();
 
                     // Managers (legacy - à migrer vers Services)
                     services.AddScoped<ISalleManager, SalleManager>();

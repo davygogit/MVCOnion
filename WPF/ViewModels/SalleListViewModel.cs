@@ -10,9 +10,8 @@ namespace WPF.ViewModels
 {
     public class SalleListViewModel : BaseViewModel
     {
-        private readonly IRepository<Salle> _salleRepository;
-        private readonly IRepository<Etage> _etageRepository;
-        private readonly ISalleManager _salleManager;
+        private readonly ISalleService _salleService;
+        private readonly IEtageService _etageService;
         private readonly IDialogService _dialogService;
 
         private ObservableCollection<Salle> _salles = new();
@@ -92,14 +91,12 @@ namespace WPF.ViewModels
         public ICommand ShowDetailsCommand { get; }
 
         public SalleListViewModel(
-            IRepository<Salle> salleRepository,
-            IRepository<Etage> etageRepository,
-            ISalleManager salleManager,
+            ISalleService salleService,
+            IEtageService etageService,
             IDialogService dialogService)
         {
-            _salleRepository = salleRepository;
-            _etageRepository = etageRepository;
-            _salleManager = salleManager;
+            _salleService = salleService;
+            _etageService = etageService;
             _dialogService = dialogService;
 
             LoadDataCommand = new AsyncRelayCommand(LoadDataAsync);
@@ -117,18 +114,12 @@ namespace WPF.ViewModels
             IsLoading = true;
             try
             {
-                // Utilisation de GetQueryable() pour ajouter Include
-                var salles = await _salleRepository.GetQueryable()
-                    .Include(s => s.Etage)
-                    .ToListAsync();
-                
+                // Utilisation du service avec Include automatique de l'étage
+                var salles = await _salleService.GetAllSallesAsync(includeEtage: true);
                 Salles = new ObservableCollection<Salle>(salles);
 
-                // Utilisation de GetQueryable() pour ajouter OrderBy
-                var etages = await _etageRepository.GetQueryable()
-                    .OrderBy(e => e.Niveau)
-                    .ToListAsync();
-                
+                // Utilisation du service avec tri automatique par Niveau
+                var etages = await _etageService.GetAllEtagesAsync();
                 Etages = new ObservableCollection<Etage>(etages);
 
                 ApplyFilters();
@@ -176,12 +167,16 @@ namespace WPF.ViewModels
 
             try
             {
-                salle.Favori = !salle.Favori;
-                await _salleRepository.UpdateAsync(salle);
-                await _salleRepository.SaveChangesAsync();
+                // Utilisation du service (logique métier déléguée)
+                var isFavori = await _salleService.ToggleFavoriAsync(salle.Id);
+                salle.Favori = isFavori;
                 
                 _dialogService.ShowInformation("Succès", 
-                    salle.Favori == true ? "Salle ajoutée aux favoris" : "Salle retirée des favoris");
+                    isFavori ? "Salle ajoutée aux favoris" : "Salle retirée des favoris");
+            }
+            catch (KeyNotFoundException ex)
+            {
+                _dialogService.ShowError("Erreur", ex.Message);
             }
             catch (Exception ex)
             {
@@ -200,11 +195,15 @@ namespace WPF.ViewModels
             {
                 try
                 {
-                    await _salleRepository.DeleteAsync(salle.Id); // Soft delete par défaut
-                    await _salleRepository.SaveChangesAsync();
+                    // Utilisation du service (soft delete par défaut)
+                    await _salleService.DeleteSalleAsync(salle.Id);
                     await LoadDataAsync();
                     
                     _dialogService.ShowInformation("Succès", "Salle supprimée avec succès");
+                }
+                catch (KeyNotFoundException ex)
+                {
+                    _dialogService.ShowError("Erreur", ex.Message);
                 }
                 catch (Exception ex)
                 {
@@ -231,8 +230,8 @@ namespace WPF.ViewModels
 
                 // Créer le ViewModel pour l'édition
                 var editViewModel = new EditSalleViewModel(
-                    _salleRepository,
-                    _etageRepository,
+                    _salleService,
+                    _etageService,
                     _dialogService,
                     imageService,
                     salle
