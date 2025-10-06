@@ -1,0 +1,22 @@
+## WPF specific
+bin/
+obj/
+*.user
+*.suo
+*.cache
+
+## Assets (images peuvent être volumineuses)
+assets/Salles/*
+assets/PlansEtages/*
+!assets/Salles/.gitkeep
+!assets/PlansEtages/.gitkeep
+
+## Visual Studio
+.vs/
+*.vsidx
+*.vspscc
+*.vsp
+*.vspx
+
+## Rider
+.idea/

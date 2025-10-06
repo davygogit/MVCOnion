@@ -1,0 +1,36 @@
+﻿@{
+    ViewData["Title"] = "Création - Authentification";
+}
+
+<div class="auth-container">
+    <div class="auth-form">
+        <h2>Authentification</h2>
+        <p>Veuillez vous connecter pour accéder aux fonctionnalités de création</p>
+        
+        <form id="loginForm" class="login-form">
+            <div class="form-group">
+                <label for="username">Identifiant :</label>
+                <input type="text" id="username" name="username" autocomplete="off" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="password">Mot de passe :</label>
+                <input type="password" id="password" name="password" autocomplete="off" required>
+            </div>
+            
+            <div class="form-actions">
+                <button type="submit" class="btn-login">Se connecter</button>
+            </div>
+        </form>
+        
+        <div id="errorMessage" class="error-message" style="display: none;">
+            Identifiant ou mot de passe incorrect
+        </div>
+    </div>
+</div>
+
+<div id="createContainer" class="container_link_create" style="display: none;">
+    <a asp-controller="Etages" asp-action="CreateEtage" class="link_create">Créer un étage</a>
+    <a asp-controller="Etages" asp-action="CreateSalle" class="link_create">Créer une salle</a>
+    <button id="logoutBtn" class="btn-logout">Se déconnecter</button>
+</div>

@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using Domain;
 using Microsoft.AspNetCore.Mvc;
 using Web.Models;
 
@@ -11,6 +12,7 @@ namespace Web.Controllers
         public HomeController(ILogger<HomeController> logger)
         {
             _logger = logger;
+            _logger.LogError("Aie aie ça marche pas !", null);
         }
 
         public IActionResult Index()
@@ -28,5 +30,7 @@ namespace Web.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
+
+
     }
 }

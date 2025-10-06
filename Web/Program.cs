@@ -1,7 +1,5 @@
-using Domain.Repository;
-using Domain;
 using Infrastructure;
-using Infrastructure.Repository;
+using Domain;
 using Microsoft.EntityFrameworkCore;
 
 namespace Web
@@ -15,10 +13,20 @@ namespace Web
             // Add services to the container.
             builder.Services.AddControllersWithViews();
 
-            builder.Services.AddDbContext<MVCOnionContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'MVCOnionContext' not found.")));
+            builder.Services.AddDbContext<WebAppMapsContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-            builder.Services.AddScoped<IRepository<Bureau>, Repository<Bureau>>();
+            builder.Services.AddScoped<IRepository<Salle>, Repository<Salle>>();
+            builder.Services.AddScoped<IRepository<SallePause>, Repository<SallePause>>();
+            builder.Services.AddScoped<IRepository<SalleBubble>, Repository<SalleBubble>>();
+            builder.Services.AddScoped<IRepository<SalleReunion>, Repository<SalleReunion>>();
+
+
+
+
             builder.Services.AddScoped<IRepository<Etage>, Repository<Etage>>();
+
+            builder.Services.AddScoped<ISalleManager, SalleManager>();
+
 
             var app = builder.Build();
 
@@ -31,17 +39,18 @@ namespace Web
             }
 
             app.UseHttpsRedirection();
-            app.UseStaticFiles();
-
             app.UseRouting();
 
             app.UseAuthorization();
 
+            app.MapStaticAssets();
             app.MapControllerRoute(
                 name: "default",
-                pattern: "{controller=Home}/{action=Index}/{id?}");
+                pattern: "{controller=Etages}/{action=SearchSalle}/{id?}")
+                .WithStaticAssets();
 
             app.Run();
         }
+
     }
 }

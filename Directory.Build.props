@@ -1,0 +1,22 @@
+<Project>
+  <PropertyGroup>
+    <!-- Versions communes -->
+    <LangVersion>latest</LangVersion>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    
+    <!-- Versions des packages -->
+    <MicrosoftExtensionsVersion>9.0.9</MicrosoftExtensionsVersion>
+    <EntityFrameworkCoreVersion>9.0.9</EntityFrameworkCoreVersion>
+    <NetVersion>9.0</NetVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- Analyseurs de code communs pour tous les projets -->
+    <PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="9.0.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+</Project>

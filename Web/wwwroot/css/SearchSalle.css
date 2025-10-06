@@ -1,0 +1,955 @@
+﻿.linkStyle {
+  text-decoration: none;
+  color: rgb(96, 167, 138);
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/*formulaire search salle*/
+
+.addItem {
+  position: absolute;
+  top: 0.5rem;
+  left: 1rem;
+  width: 1rem;
+}
+
+.search-room-container {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 70rem;
+  height: 80vh;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  font-family: "Segoe UI", sans-serif;
+  background-color: white;
+  border-radius: 1rem;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  overflow: visible;
+}
+
+.bodyBackDesable {
+  z-index: 1000;
+  background-color: rgba(0, 0, 0, 0.4);
+  pointer-events: none;
+}
+
+.form-section {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+  padding: 0 18rem;
+}
+
+.form {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.input-field {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px 0 0 6px;
+  width: 20rem;
+  height: 2.5rem;
+  outline: none;
+  transition: all 0.3s;
+}
+
+.input-field:focus {
+  width: 21rem;
+}
+
+.btn {
+  height: 2.5rem;
+  width: 4rem;
+  border: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgb(96, 167, 138);
+  color: white;
+  font-weight: bold;
+  border-radius: 0 6px 6px 0;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.btn:hover {
+  background-color: rgb(124, 170, 150);
+  color: white;
+}
+
+.btn-reset {
+  width: auto;
+  padding: 0 1.5rem;
+  border-radius: 6px;
+  background-color: #6c757d;
+  font-size: 0.9rem;
+  gap: 0.5rem;
+  transition: all 0.3s ease;
+}
+
+.btn-reset:hover {
+  background-color: #5a6268;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.btn-reset svg {
+  transition: transform 0.3s ease;
+}
+
+.btn-reset:hover svg {
+  transform: rotate(180deg);
+}
+
+.sort-select {
+  font-size: 16px;
+  background-color: #f8f8f8;
+  outline: none;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  padding: 10px;
+  height: 2.5rem;
+  min-width: 150px;
+  transition: all 0.3s ease;
+}
+
+.sort-select:focus {
+  outline: none;
+  border-color: rgb(96, 167, 138);
+  box-shadow: 0 0 5px rgba(96, 167, 138, 0.3);
+}
+
+.formSelectFiltre {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 1rem;
+  margin-bottom: 50px;
+  overflow: visible;
+  position: relative;
+  z-index: 10;
+}
+
+.form-select {
+  font-size: 16px;
+  background-color: #f8f8f8;
+  outline: none;
+  border: none;
+  border-radius: 0;
+  border-bottom: 1px solid rgb(96, 167, 138);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+}
+
+.form-select:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+/*fin formulaire search salle*/
+/*style affichage card salleClick*/
+.container_ListSalle {
+  width: 100%;
+  height: 100%;
+  display: grid;
+  grid-template-columns: repeat(3, 20rem);
+  grid-auto-rows: 7rem;
+  justify-content: center;
+  overflow-y: scroll;
+  gap: 1rem;
+  padding: 2rem 0;
+  min-width: 62rem;
+}
+
+.box_visuSalle {
+  position: relative;
+  width: 20rem;
+  height: 7rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0rem 0rem 2rem rgba(0, 0, 0, 0.2);
+  background-color: #f9f9f9;
+  border-radius: 1rem;
+  overflow: hidden;
+}
+
+.box_visuSalleInfo {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  width: 30%;
+  height: 100%;
+  font-size: 1rem;
+  line-height: 3px;
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+}
+
+.box_visuSalleInfo p {
+  text-transform: capitalize;
+  color: black;
+  font-weight: 500;
+}
+
+.box_visuSalleImg {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 70%;
+  height: 100%;
+  -webkit-clip-path: polygon(0 40%, 70% 0, 100% 0, 100% 100%, 0 100%);
+  clip-path: polygon(0 40%, 70% 0, 100% 0, 100% 100%, 0 100%);
+}
+
+.iconStar {
+  fill: rgb(96, 167, 138);
+}
+
+.iconStarFiltre {
+  position: absolute;
+  top: 3.5rem;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+@media only screen and (max-width: 1200px) {
+  .img-plan {
+    transform: scale(1rem) translateY(2rem);
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+
+  .search-room-container {
+    top: 52%;
+    width: 50rem;
+    overflow: visible;
+  }
+  .form-section {
+    padding: 0 10rem;
+  }
+  .input-field {
+    padding: 5px;
+    width: 15rem;
+    height: 1.8rem;
+  }
+
+  .input-field:focus {
+    width: 16rem;
+  }
+
+  .formSelectFiltre {
+    height: 1.8rem;
+    margin-bottom: 50px;
+    overflow: visible;
+  }
+  .btn {
+    height: 1.8rem;
+    width: 5rem;
+  }
+
+  .btn-reset {
+    height: 1.8rem;
+    padding: 0 1rem;
+    font-size: 0.8rem;
+  }
+
+  .container_ListSalle {
+    grid-template-columns: repeat(2, 20rem);
+    min-width: 42rem;
+  }
+
+  .sort-select {
+    height: 2.5rem;
+    min-width: 120px;
+    font-size: 14px;
+    padding: 8px;
+  }
+
+  .form-select {
+    font-size: 14px;
+  }
+}
+
+@media only screen and (max-width: 850px) {
+  .search-room-container {
+    top: 52%;
+    width: 22rem;
+    overflow: visible;
+    padding:0;
+  }
+
+  .form-section {
+    padding: 0rem;
+  }
+
+    .form-search {
+        padding: 2rem;
+    }
+
+  .input-field {
+    width: 12rem;
+  }
+
+  .input-field:focus {
+    width: 13rem;
+  }
+
+  .form-select {
+    font-size: 10px;
+    height: 1.8rem;
+  }
+
+  .btn-reset {
+    height: 1.8rem;
+    padding: 0 0.8rem;
+    font-size: 0.7rem;
+  }
+
+  .container_ListSalle {
+    grid-template-columns: repeat(1, 19rem);
+    min-width: 20rem;
+  }
+
+  .sort-select {
+    height: 2.5rem;
+    min-width: 100px;
+    font-size: 12px;
+    padding: 6px;
+  }
+
+  .formSelectFiltre {
+    overflow: visible;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 0.5rem;
+  }
+
+    .box_visuSalle {
+        width: 19rem;
+        box-shadow: none;
+    }
+}
+
+@media only screen and (max-width: 450px) {
+  .search-room-container {
+    top: 52%;
+    width: 21rem;
+    padding: .5rem 0;
+    overflow: visible;
+  }
+
+
+
+    .form-search {
+        padding: 1rem;
+        padding-top:2rem;
+    }
+
+
+  .input-field {
+    width: 15rem;
+    font-size: 10px;
+  }
+
+  .input-field:focus {
+    width: 9rem;
+  }
+
+  .btn-reset {
+    height: 1.8rem;
+    padding: 0 0.6rem;
+    font-size: 0.6rem;
+  }
+
+
+  .sort-select {
+    min-width: 80px;
+    font-size: 10px;
+    padding: 5px;
+  }
+
+}
+
+/*fin style affichage card salleClick*/
+
+/*style affichage toutes les infos salle et etage*/
+
+.container_plan_info {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 90vw;
+  height: 94vh;
+
+  background-color: white;
+  border-radius: 1rem;
+  display: grid;
+  grid-template-rows: 1fr 4fr;
+  align-items: center;
+  justify-content: center;
+  pointer-events: all;
+  overflow: hidden;
+  z-index: 10000;
+  display: none;
+}
+
+.closeModal {
+  position: absolute;
+  right: 1rem;
+  top: 0rem;
+  border: none;
+  outline: none;
+  font-size: 2rem;
+  color: rgb(96, 167, 138);
+  background-color: transparent;
+  cursor: pointer;
+  z-index: 30000;
+}
+
+.hidden {
+  display: none;
+}
+
+.section_infoSalle {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 5rem;
+  background-color: white;
+  display: grid;
+  grid-template-columns: 1fr 4fr;
+
+}
+
+.box_imgSalle {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 30%;
+  height: 7rem;
+}
+
+.imgSalle {
+  width: 100%;
+  height: 100%;
+  -webkit-clip-path: polygon(0 0%, 60% 0, 100% 50%, 100% 100%, 0 100%);
+  clip-path: polygon(0 0%, 60% 0, 100% 50%, 100% 100%, 0 100%);
+  object-fit: cover;
+}
+
+.box_iconFavori {
+  position: absolute;
+  top: 0.2rem;
+  left: 29%;
+  cursor: pointer;
+  z-index: 50000;
+}
+
+.list-info {
+  position: absolute;
+  top: 0.35rem;
+  left: 31%;
+  width: 64%;
+  height: 6rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-items: start;
+  overflow-x: auto; /* Active le défilement horizontal */
+  gap:1rem;
+}
+
+.box_infoPrin_salle_modal {
+  display: flex;
+  gap: 1rem;
+  flex-direction: row; /* Garde les éléments en ligne */
+  width: max-content; /* Permet au conteneur de s'adapter à la largeur de son contenu */
+}
+
+.box_infoPrin_salle_modal div {
+  display: flex;
+  gap: 1rem;
+  white-space: nowrap; /* Empêche le texte de passer à la ligne */
+}
+
+.p_infoSalle {
+  margin-bottom: 0;
+}
+
+/* Styles pour mettre en valeur les informations principales de la salle */
+.salle-nom {
+  font-size: 1.2rem !important;
+  font-weight: 700 !important;
+  color: rgb(96, 167, 138) !important;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 0.3rem !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.salle-numero {
+  font-size: 1rem !important;
+  font-weight: 600 !important;
+  color: #2c3e50 !important;
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  padding: 0.2rem 0.5rem;
+  border-radius: 0.3rem;
+  display: inline-block;
+  margin-bottom: 0.3rem !important;
+  border-left: 3px solid rgb(96, 167, 138);
+}
+
+.salle-etage {
+  font-size: 0.95rem !important;
+  font-weight: 500 !important;
+  color: #495057 !important;
+  background-color: rgba(96, 167, 138, 0.1);
+  padding: 0.15rem 0.4rem;
+  border-radius: 0.25rem;
+  display: inline-block;
+  margin-bottom: 0.3rem !important;
+  border: 1px solid rgba(96, 167, 138, 0.2);
+}
+
+.salle-type {
+  font-size: 0.9rem !important;
+  font-weight: 500 !important;
+  color: #6c757d !important;
+  font-style: italic;
+  margin-bottom: 0.3rem !important;
+}
+
+.section_imgPlan {
+  position: absolute;
+  top: 7rem;
+  left: 0;
+  width: 100%;
+  height: 70vh;
+  background-color: white;
+  overflow: hidden;
+}
+
+.img-plan {
+  transform: scale(1.1);
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  cursor: crosshair;
+}
+
+/* Styles pour les canvas dans les modals */
+.img-plan[data-imgpath] {
+  border: 1px solid #ddd;
+  background-color: #f8f9fa;
+  cursor: grab;
+  transition: cursor 0.2s ease;
+}
+
+.img-plan[data-imgpath]:active {
+  cursor: grabbing;
+}
+
+/* Styles pour les contrôles de zoom */
+.canvas-container {
+  position: relative;
+  overflow: hidden;
+  border-radius: 0.5rem;
+}
+
+/* Styles pour les attributs avec icônes */
+.attributs-container {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 0.5rem;
+  margin-top: -1rem;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding-bottom: 0.5rem;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(96, 167, 138, 0.3) ;
+}
+
+.attributs-container::-webkit-scrollbar {
+  height: 4px;
+}
+
+.attributs-container::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.attributs-container::-webkit-scrollbar-thumb {
+  background-color: rgba(96, 167, 138, 0.3);
+  border-radius: 2px;
+}
+
+.attributs-container::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(96, 167, 138, 0.5);
+}
+
+.attribut-item {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.3rem 0.6rem;
+  border-radius: 0.5rem;
+  font-size: 0.8rem;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  min-width: fit-content;
+}
+
+.attribut-item svg {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+}
+
+.attribut-item span {
+  white-space: nowrap;
+}
+
+.attribut-present {
+  background-color: rgba(40, 167, 69, 0.2);
+  color: #155724;
+  border: 1px solid rgba(40, 167, 69, 0.3);
+}
+
+.attribut-present svg {
+  fill: #28a745;
+}
+
+.attribut-present:hover {
+  background-color: rgba(40, 167, 69, 0.3);
+  box-shadow: 0 2px 4px rgba(40, 167, 69, 0.2);
+}
+
+.attribut-absent {
+  background-color: rgba(220, 53, 69, 0.2);
+  color: #721c24;
+  border: 1px solid rgba(220, 53, 69, 0.3);
+}
+
+.attribut-absent svg {
+  fill: #dc3545;
+}
+
+.attribut-absent:hover {
+  background-color: rgba(220, 53, 69, 0.3);
+  box-shadow: 0 2px 4px rgba(220, 53, 69, 0.2);
+}
+
+/* Attributs sans état booléen (informations) */
+.attribut-item:not(.attribut-present):not(.attribut-absent) {
+  background-color: rgba(108, 117, 125, 0.2);
+  color: #495057;
+  border: 1px solid rgba(108, 117, 125, 0.3);
+}
+
+.attribut-item:not(.attribut-present):not(.attribut-absent) svg {
+  fill: #6c757d;
+}
+
+.attribut-item:not(.attribut-present):not(.attribut-absent):hover {
+  background-color: rgba(108, 117, 125, 0.3);
+  box-shadow: 0 2px 4px rgba(108, 117, 125, 0.2);
+}
+
+@media only screen and (max-height: 1200px) {
+  .container_plan_info {
+    height: 85vh;
+
+
+  }
+
+  .search-room-container{
+    height: 85vh;
+  }
+}
+
+@media only screen and (max-width: 1200px) {
+
+    .list-info {
+
+        width: 63%;
+
+    }
+
+  .img-plan {
+    transform: scale(.9);
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+
+  .box_iconFavori {
+    position: absolute;
+    top: 0.2rem;
+    left: 28%;
+    cursor: pointer;
+    z-index: 50000;
+  }
+}
+
+@media only screen and (max-width: 850px) {
+
+
+
+  .img-plan {
+    transform: rotate(-90deg) scale(1.1) translate(3rem);
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+
+  .box_iconFavori {
+    position: absolute;
+    top: 0rem;
+    left: 26%;
+    cursor: pointer;
+    z-index: 50000;
+  }
+}
+
+@media only screen and (max-width: 770px) {
+  .closeModal {
+    position: absolute;
+    right: .1rem;
+    top: -.5rem;
+    border: none;
+    outline: none;
+    font-size: 1.5rem;
+    color: rgb(96, 167, 138);
+    background-color: transparent;
+    z-index: 30000;
+  }
+}
+
+@media only screen and (max-width: 450px) {
+
+
+
+  .img-plan {
+    transform: rotate(-90deg) scale(1.5) translate(2rem);
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+
+
+
+  .box_iconFavori {
+    position: absolute;
+    top: 0rem;
+    left: 25%;
+    cursor: pointer;
+    z-index: 50000;
+  }
+
+  /* Styles pour très petits écrans */
+  .salle-nom {
+    font-size: 0.9rem !important;
+    margin-bottom: 0.15rem !important;
+  }
+
+  .salle-numero {
+    font-size: 0.8rem !important;
+    padding: 0.1rem 0.3rem;
+    margin-bottom: 0.15rem !important;
+  }
+
+  .salle-etage {
+    font-size: 0.7rem !important;
+    padding: 0.08rem 0.25rem;
+    margin-bottom: 0.15rem !important;
+  }
+
+  .salle-type {
+    font-size: 0.65rem !important;
+    margin-bottom: 0.15rem !important;
+  }
+
+  /* Scroll horizontal pour les attributs sur très petits écrans */
+  .attributs-container {
+    gap: 0.3rem;
+    padding-bottom: 0.3rem;
+  }
+
+  .attribut-item {
+    flex-shrink: 0;
+    min-width: max-content;
+    font-size: 0.7rem;
+    padding: 0.2rem 0.4rem;
+  }
+}
+
+/*fin style affichage toutes les infos salle et etage*/
+
+/* Styles pour le formulaire de signalement */
+.signaler-container {
+  width: 40rem;
+  max-width: 90vw;
+  border-radius: 1rem;
+  padding: 2rem;
+  font-family: "Segoe UI", sans-serif;
+  margin: 2rem auto;
+}
+
+.signaler-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.signaler-header h2 {
+  color: rgb(96, 167, 138);
+  font-size: 1.8rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.signaler-header p {
+  color: #666;
+  font-size: 1rem;
+  margin: 0;
+}
+
+.signaler-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.form-group label {
+  font-weight: 500;
+  color: #333;
+  font-size: 1rem;
+}
+
+.form-input,
+.form-textarea {
+  padding: 0.75rem;
+  border: 1px solid #ccc;
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  font-family: inherit;
+  transition: all 0.3s ease;
+  outline: none;
+}
+
+.form-input:focus,
+.form-textarea:focus {
+  border-color: rgb(96, 167, 138);
+  box-shadow: 0 0 5px rgba(96, 167, 138, 0.3);
+}
+
+.form-textarea {
+  resize: vertical;
+  min-height: 6rem;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.btn_2 {
+  width: max-content;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 0.5rem;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.btn-primary {
+  background-color: rgb(96, 167, 138);
+  color: white;
+}
+
+.btn-primary:hover {
+  background-color: rgb(124, 170, 150);
+  transform: translateY(-1px);
+}
+
+.btn-secondary {
+  background-color: #f8f9fa;
+  color: #666;
+  border: 1px solid #ddd;
+}
+
+.btn-secondary:hover {
+  background-color: #e9ecef;
+  color: #333;
+}
+/* Responsive design pour le formulaire de signalement */
+@media only screen and (max-width: 768px) {
+  .signaler-container {
+    width: 90vw;
+    padding: 1.5rem;
+    margin: 1rem auto;
+  }
+
+  .signaler-header h2 {
+    font-size: 1.5rem;
+  }
+
+  .form-actions {
+    flex-direction: column;
+  }
+
+  .btn {
+    width: 100%;
+  }
+}
+
+@media only screen and (max-width: 480px) {
+  .signaler-container {
+    width: 95vw;
+    padding: 1rem;
+    margin: 0.5rem auto;
+  }
+
+  .signaler-header h2 {
+    font-size: 1.3rem;
+  }
+
+  .form-input,
+  .form-textarea {
+    font-size: 0.9rem;
+  }
+}
+

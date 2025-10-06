@@ -1,15 +1,17 @@
-﻿namespace Domain
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Domain
 {
     public class Etage : Entity
     {
-        public Etage() { }
-        public Etage(string name, int number)
-        {
-            Name = name;
-            Number = number;
-        }
-        public string Name { get; set; }
-        public int Number { get; set; }
-        public ICollection<Bureau> bureaux { get; set; } = new List<Bureau>();
+        public int Niveau { get; set; }
+        public string Nom { get; set; }
+        public string? ImgPlanEtagePath { get; set; }
+        public ICollection<Salle> Salles { get; set; } = new List<Salle>();
+
     }
 }

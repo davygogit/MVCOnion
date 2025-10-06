@@ -1,0 +1,173 @@
+﻿@using Domain
+@using Web.ViewModel
+@model SalleViewModel
+<div class="search-room-container">
+    <a class="linkStyle addItem" asp-controller="Etages" asp-action="Create">+</a>
+    <form class="form form-section form-search" id="searchSalleForm">
+        <input name="salle" id="salleInput" placeholder="Numéro/Nom salle" class="input-field" />
+        <button type="submit" class="btn">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0" />
+            </svg>
+        </button>
+    </form>
+    <div class="form form-section" id="sortSection">
+        <select id="sortSelect" class="form-select sort-select">
+            <option value="default">-- Trier par --</option>
+            <option value="name-asc">Nom (A-Z)</option>
+            <option value="name-desc">Nom (Z-A)</option>
+            <option value="number-asc">Numéro (croissant)</option>
+            <option value="number-desc">Numéro (décroissant)</option>
+            <option value="type-asc">Type (A-Z)</option>
+            <option value="type-desc">Type (Z-A)</option>
+            <option value="floor-asc">Étage (croissant)</option>
+            <option value="floor-desc">Étage (décroissant)</option>
+        </select>
+    </div>
+    <form class="form formSelectFiltre form-section">
+        <select id="etageSelect" name="EtageId" class="form-select">
+            <option value="all">-- Etages --</option>
+            <hr class="dropdown-divider">
+            @foreach (var etage in Model.etages)
+            {
+                <option value="@etage.Id">@etage.Nom</option>
+            }
+        </select>
+        <select id="typeSalle" name="TypeSalle" class="form-select">
+            <option value="all">-- Type --</option>
+            <hr class="dropdown-divider">
+            @foreach (var type in Model.salles.Select(s => s.TypeSalle).Distinct())
+            {
+                <option value="@type">@type</option>
+            }
+        </select>
+        <select id="attributSalle" name="AttributSalle" class="form-select">
+            <option value="all">-- Propriété --</option>
+            <hr class="dropdown-divider">
+            @{
+                var addedOptions = new HashSet<string>();
+                foreach (var salle in Model.salles)
+                {
+                    var sallePause = salle as SallePause;
+                    var salleReunion = salle as SalleReunion;
+                    var salleBubble = salle as SalleBubble;
+                    if (sallePause != null)
+                    {
+                        if (addedOptions.Add("distributeur"))
+                        {
+                            <option value="distributeur">Distributeur</option>
+                        }
+                        if (addedOptions.Add("frigo"))
+                        {
+                            <option value="frigo">Frigo</option>
+                        }
+                    }
+                    if (salleReunion != null)
+                    {
+                        if (addedOptions.Add("ecran"))
+                        {
+                            <option value="ecran">Écran</option>
+                        }
+                        if (addedOptions.Add("camera"))
+                        {
+                            <option value="camera">Caméra</option>
+                        }
+                        if (addedOptions.Add("tableaublanc"))
+                        {
+                            <option value="tableaublanc">Tableau blanc</option>
+                        }
+                        if (addedOptions.Add("systemeaudio"))
+                        {
+                            <option value="systemeaudio">Système audio</option>
+                        }
+                    }
+
+                    if (salleBubble != null && addedOptions.Add("priseelectrique"))
+                    {
+                        <option value="priseelectrique">Prise électrique</option>
+                    }
+                }
+            }
+        </select>
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" id="favoriSelect" class="bi bi-star-fill iconFavoriFill iconStar iconStarFiltre" viewBox="0 0 16 16">
+            <path class="iconStar-filter" d="M2.866 14.85c-.078.444.36.791.746.593l4.39-2.256 4.389 2.256c.386.198.824-.149.746-.592l-.83-4.73 3.522-3.356c.33-.314.16-.888-.282-.95l-4.898-.696L8.465.792a.513.513 0 0 0-.927 0L5.354 5.12l-4.898.696c-.441.062-.612.636-.283.95l3.523 3.356-.83 4.73zm4.905-2.767-3.686 1.894.694-3.957a.56.56 0 0 0-.163-.505L1.71 6.745l4.052-.576a.53.53 0 0 0 .393-.288L8 2.223l1.847 3.658a.53.53 0 0 0 .393.288l4.052.575-2.906 2.77a.56.56 0 0 0-.163.506l.694 3.957-3.686-1.894a.5.5 0 0 0-.461 0z" />
+        </svg>
+    </form>
+    <div class="form form-section" id="resetSection">
+        <button type="button" id="resetFilters" class="btn btn-reset">
+            Reset
+        </button>
+    </div>
+    <div id="sallesList" class="container_ListSalle">
+        @if (Model.salles != null)
+        {
+            @foreach (var salle in Model.salles)
+            {
+                var sallePause = salle as SallePause;
+                var salleReunion = salle as SalleReunion;
+                var salleBubble = salle as SalleBubble;
+                <a class="salles_click"
+                   data-etage="@salle.EtageId"
+                   data-salleclickid="@salle.Id"
+                   data-type="@salle.TypeSalle"
+                   data-sallenom="@salle.Nom"
+                   data-sallenum="@salle.Numero"
+                   data-salleetage="@salle.Etage.Nom"
+                   data-salleimg="@salle.ImgSallePath"
+                   data-planimg="@salle.Etage.ImgPlanEtagePath"
+                   data-coordx="@salle.CoordonneeX"
+                   data-coordy="@salle.CoordonneeY"
+                   @if (sallePause != null)
+                   {
+                       @:data-distributeur="@(sallePause.Distributeur ? "distributeur" : "non")"
+                       @:data-frigo="@(sallePause.Frigo ? "frigo" : "non")"
+                       @:data-microondes="@sallePause.MicroOndes"
+                       @:data-evier="@sallePause.Evier"
+                       @:data-nbplaces="@sallePause.NbPlaces"
+                       @:data-nbtables="@sallePause.NbTables"
+                   }
+                   @if (salleReunion != null)
+                   {
+                       @:data-ecran="@(salleReunion.Ecran ? "ecran" : "non")"
+                       @:data-camera="@(salleReunion.Camera ? "camera" : "non")"
+                       @:data-tableaublanc="@(salleReunion.TableauBlanc ? "tableaublanc" : "non")"
+                       @:data-systemeaudio="@(salleReunion.SystemeAudio ? "systemeaudio" : "non")"
+                       @:data-nbplaces="@salleReunion.NbPlaces"
+                       @:data-nbtables="@salleReunion.NbTables"
+                   }
+                   @if (salleBubble != null)
+                   {
+                       @:data-priseelectrique="@(salleBubble.PriseElectrique ? "priseelectrique" : "non")"
+                       @:data-nbplaces="@salleBubble.NbPlaces"
+                       @:data-nbtables="@salleBubble.NbTables"
+                   }
+                   style="cursor:pointer;">
+                    <div class="box_visuSalle">
+                        <div class="box_visuSalleInfo">
+                            <p>@salle.Nom</p>
+                            <p>@salle.Numero</p>
+                            <p>@salle.TypeSalle</p>
+                            <div class="box_iconFavori_visuSalle" data-salleinfoid="@salle.Id">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-star-fill iconFavoriFill iconStar iconStar_favori_cartes" viewBox="0 0 16 16">
+                                    <path d="" />
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="box_visuSalleImg">
+                            <img class="Img_visuSalle" src="~/@salle.ImgSallePath" />
+                        </div>
+                    </div>
+                </a>
+            }
+        }
+        else
+        {
+            <p>no working</p>
+        }
+    </div>
+</div>
+
+<!-- Conteneur pour le modal dynamique -->
+<div id="modalContainer"></div>
+
+
