@@ -8,7 +8,7 @@ namespace WPF.ViewModels
 {
     public class CreateEtageViewModel : BaseViewModel
     {
-        private readonly IRepository<Etage> _etageRepository;
+        private readonly IEtageService _etageService;
         private readonly IDialogService _dialogService;
         private readonly IImageService _imageService;
 
@@ -46,11 +46,11 @@ namespace WPF.ViewModels
         public ICommand CancelCommand { get; }
 
         public CreateEtageViewModel(
-            IRepository<Etage> etageRepository,
+            IEtageService etageService,
             IDialogService dialogService,
             IImageService imageService)
         {
-            _etageRepository = etageRepository;
+            _etageService = etageService;
             _dialogService = dialogService;
             _imageService = imageService;
 
@@ -83,32 +83,47 @@ namespace WPF.ViewModels
             IsSaving = true;
             try
             {
+                // Sauvegarde de l'image (logique UI-specific)
                 string? savedImagePath = null;
                 if (!string.IsNullOrEmpty(ImagePath))
                 {
                     savedImagePath = await _imageService.SaveImageAsync(ImagePath, "PlansEtages");
                 }
 
-                var etage = new Etage
+                // Création du DTO pour le service
+                var dto = new CreateEtageDto
                 {
                     Niveau = Niveau,
                     Nom = Nom,
                     ImgPlanEtagePath = savedImagePath
                 };
 
-                await _etageRepository.AddAsync(etage);
-                await _etageRepository.SaveChangesAsync();
+                // Appel du service (logique métier déléguée)
+                var etage = await _etageService.CreateEtageAsync(dto);
 
-                _dialogService.ShowInformation("Succès", "Étage créé avec succès !");
+                _dialogService.ShowInformation("Succès", 
+                    $"Étage '{etage.Nom}' (niveau {etage.Niveau}) créé avec succès !");
                 
                 // Reset form
                 Niveau = 0;
                 Nom = string.Empty;
                 ImagePath = null;
             }
+            catch (InvalidOperationException ex)
+            {
+                // Erreur de règle métier (ex: niveau déjà existant)
+                _dialogService.ShowError("Règle métier", ex.Message);
+            }
+            catch (ArgumentException ex)
+            {
+                // Erreur de validation
+                _dialogService.ShowError("Validation", ex.Message);
+            }
             catch (Exception ex)
             {
-                _dialogService.ShowError("Erreur", $"Erreur lors de la création: {ex.Message}");
+                // Erreur technique imprévue
+                _dialogService.ShowError("Erreur", 
+                    $"Erreur lors de la création de l'étage: {ex.Message}");
             }
             finally
             {

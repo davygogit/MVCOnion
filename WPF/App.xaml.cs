@@ -37,7 +37,10 @@ namespace WPF
                     services.AddScoped<IRepository<SalleReunion>, Repository<SalleReunion>>();
                     services.AddScoped<IRepository<Etage>, Repository<Etage>>();
 
-                    // Managers
+                    // Services métier (Business Logic Layer)
+                    services.AddScoped<IEtageService, EtageService>();
+
+                    // Managers (legacy - à migrer vers Services)
                     services.AddScoped<ISalleManager, SalleManager>();
 
                     // Services

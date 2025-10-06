@@ -8,7 +8,7 @@ namespace WPF.ViewModels
 {
     public class EtageViewModel : BaseViewModel
     {
-        private readonly IRepository<Etage> _etageRepository;
+        private readonly IEtageService _etageService;
         private readonly IDialogService _dialogService;
         private readonly IImageService _imageService;
 
@@ -37,11 +37,11 @@ namespace WPF.ViewModels
         public ICommand LoadDataCommand { get; }
 
         public EtageViewModel(
-            IRepository<Etage> etageRepository,
+            IEtageService etageService,
             IDialogService dialogService,
             IImageService imageService)
         {
-            _etageRepository = etageRepository;
+            _etageService = etageService;
             _dialogService = dialogService;
             _imageService = imageService;
 
@@ -55,8 +55,8 @@ namespace WPF.ViewModels
             IsLoading = true;
             try
             {
-                // Utilisation de GetAllAsync() au lieu de GetAll().ToList()
-                var etages = await _etageRepository.GetAllAsync();
+                // Utilisation du service au lieu du repository
+                var etages = await _etageService.GetAllEtagesAsync();
                 Etages = new ObservableCollection<Etage>(etages);
             }
             catch (Exception ex)
