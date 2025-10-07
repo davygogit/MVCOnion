@@ -161,6 +161,21 @@ namespace Domain
         public int? NbTables { get; set; }
         public int? NbPlaces { get; set; }
         public int EtageId { get; set; }
+
+        // Propriétés spécifiques SalleReunion
+        public bool? Ecran { get; set; }
+        public bool? Camera { get; set; }
+        public bool? TableauBlanc { get; set; }
+        public bool? SystemeAudio { get; set; }
+
+        // Propriétés spécifiques SallePause
+        public int? MicroOndes { get; set; }
+        public bool? Frigo { get; set; }
+        public int? Evier { get; set; }
+        public bool? Distributeur { get; set; }
+
+        // Propriétés spécifiques SalleBubble
+        public bool? PriseElectrique { get; set; }
     }
 
     /// <summary>
@@ -179,6 +194,21 @@ namespace Domain
         public int? NbTables { get; set; }
         public int? NbPlaces { get; set; }
         public int EtageId { get; set; }
+
+        // Propriétés spécifiques SalleReunion
+        public bool? Ecran { get; set; }
+        public bool? Camera { get; set; }
+        public bool? TableauBlanc { get; set; }
+        public bool? SystemeAudio { get; set; }
+
+        // Propriétés spécifiques SallePause
+        public int? MicroOndes { get; set; }
+        public bool? Frigo { get; set; }
+        public int? Evier { get; set; }
+        public bool? Distributeur { get; set; }
+
+        // Propriétés spécifiques SalleBubble
+        public bool? PriseElectrique { get; set; }
     }
 
     #endregion

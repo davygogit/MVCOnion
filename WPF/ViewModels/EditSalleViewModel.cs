@@ -282,7 +282,7 @@ namespace WPF.ViewModels
                 // Détermine le type de salle
                 TypeSalle typeSalle = Enum.Parse<TypeSalle>(SelectedTypeSalle);
 
-                // Création du DTO pour le service
+                // Création du DTO pour le service avec toutes les propriétés
                 var dto = new UpdateSalleDto
                 {
                     Id = SalleId,
@@ -295,17 +295,29 @@ namespace WPF.ViewModels
                     ImgSallePath = savedImagePath,
                     EtageId = SelectedEtage!.Id,
                     TypeSalle = typeSalle,
-                    Favori = _originalSalle.Favori
+                    Favori = _originalSalle.Favori,
+                    
+                    // Propriétés spécifiques SalleReunion
+                    Ecran = Ecran,
+                    Camera = Camera,
+                    TableauBlanc = TableauBlanc,
+                    SystemeAudio = SystemeAudio,
+                    
+                    // Propriétés spécifiques SallePause
+                    MicroOndes = MicroOndes,
+                    Evier = Evier,
+                    Frigo = Frigo,
+                    Distributeur = Distributeur,
+                    
+                    // Propriétés spécifiques SalleBubble
+                    PriseElectrique = PriseElectrique
                 };
 
-                // Appel du service (logique métier déléguée)
+                // Appel du service (logique métier déléguée avec propriétés spécifiques)
                 var updatedSalle = await _salleService.UpdateSalleAsync(dto);
 
-                // Note: Les propriétés spécifiques (Ecran, Camera, etc.) ne sont pas 
-                // gérées dans cette version simplifiée du DTO.
-                // TODO: Créer des DTOs spécifiques (UpdateSalleReunionDto, etc.) si besoin
-
-                _dialogService.ShowInformation("Succès", "Salle modifiée avec succès");
+                _dialogService.ShowInformation("Succès", 
+                    $"Salle '{updatedSalle.Nom}' (n°{updatedSalle.Numero}) modifiée avec succès !");
                 SaveCompleted?.Invoke(this, EventArgs.Empty);
             }
             catch (KeyNotFoundException ex)

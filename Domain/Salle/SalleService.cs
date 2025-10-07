@@ -44,19 +44,70 @@ namespace Domain
             // Règle métier 3: Validation spécifique selon le type de salle
             ValidateTypeSpecificRules(dto.TypeSalle, dto.NbPlaces, dto.NbTables);
 
-            // Création de l'entité Salle
-            var salle = new Salle
+            // Création de l'entité Salle selon le type
+            Salle salle = dto.TypeSalle switch
             {
-                Nom = dto.Nom?.Trim(),
-                Numero = dto.Numero,
-                ImgSallePath = dto.ImgSallePath,
-                Favori = dto.Favori ?? false,
-                TypeSalle = dto.TypeSalle,
-                CoordonneeX = dto.CoordonneeX ?? "0",
-                CoordonneeY = dto.CoordonneeY ?? "0",
-                NbTables = dto.NbTables,
-                NbPlaces = dto.NbPlaces,
-                EtageId = dto.EtageId
+                TypeSalle.Reunion => new SalleReunion
+                {
+                    Nom = dto.Nom?.Trim(),
+                    Numero = dto.Numero,
+                    ImgSallePath = dto.ImgSallePath,
+                    Favori = dto.Favori ?? false,
+                    TypeSalle = dto.TypeSalle,
+                    CoordonneeX = dto.CoordonneeX ?? "0",
+                    CoordonneeY = dto.CoordonneeY ?? "0",
+                    NbTables = dto.NbTables,
+                    NbPlaces = dto.NbPlaces,
+                    EtageId = dto.EtageId,
+                    Ecran = dto.Ecran ?? false,
+                    Camera = dto.Camera ?? false,
+                    TableauBlanc = dto.TableauBlanc ?? false,
+                    SystemeAudio = dto.SystemeAudio ?? false
+                },
+                TypeSalle.Pause => new SallePause
+                {
+                    Nom = dto.Nom?.Trim(),
+                    Numero = dto.Numero,
+                    ImgSallePath = dto.ImgSallePath,
+                    Favori = dto.Favori ?? false,
+                    TypeSalle = dto.TypeSalle,
+                    CoordonneeX = dto.CoordonneeX ?? "0",
+                    CoordonneeY = dto.CoordonneeY ?? "0",
+                    NbTables = dto.NbTables,
+                    NbPlaces = dto.NbPlaces,
+                    EtageId = dto.EtageId,
+                    MicroOndes = dto.MicroOndes ?? 0,
+                    Frigo = dto.Frigo ?? false,
+                    Evier = dto.Evier ?? 0,
+                    Distributeur = dto.Distributeur ?? false
+                },
+                TypeSalle.Bubble => new SalleBubble
+                {
+                    Nom = dto.Nom?.Trim(),
+                    Numero = dto.Numero,
+                    ImgSallePath = dto.ImgSallePath,
+                    Favori = dto.Favori ?? false,
+                    TypeSalle = dto.TypeSalle,
+                    CoordonneeX = dto.CoordonneeX ?? "0",
+                    CoordonneeY = dto.CoordonneeY ?? "0",
+                    NbTables = dto.NbTables,
+                    NbPlaces = dto.NbPlaces,
+                    EtageId = dto.EtageId,
+                    PriseElectrique = dto.PriseElectrique ?? false
+                },
+                _ => new Salle
+                {
+                    Nom = dto.Nom?.Trim(),
+                    Numero = dto.Numero,
+                    ImgSallePath = dto.ImgSallePath,
+                    Favori = dto.Favori ?? false,
+                    TypeSalle = dto.TypeSalle,
+                    CoordonneeX = dto.CoordonneeX ?? "0",
+                    CoordonneeY = dto.CoordonneeY ?? "0",
+                    NbTables = dto.NbTables,
+                    NbPlaces = dto.NbPlaces,
+                    EtageId = dto.EtageId
+                }
             };
 
             await _salleRepository.AddAsync(salle);
@@ -211,7 +262,7 @@ namespace Domain
             // Règle métier 3: Validation spécifique selon le type de salle
             ValidateTypeSpecificRules(dto.TypeSalle, dto.NbPlaces, dto.NbTables);
 
-            // Mise à jour des propriétés
+            // Mise à jour des propriétés communes
             salle.Nom = dto.Nom?.Trim();
             salle.Numero = dto.Numero;
             salle.ImgSallePath = dto.ImgSallePath;
@@ -222,6 +273,26 @@ namespace Domain
             salle.NbTables = dto.NbTables;
             salle.NbPlaces = dto.NbPlaces;
             salle.EtageId = dto.EtageId;
+
+            // Mise à jour des propriétés spécifiques selon le type
+            if (salle is SalleReunion reunion)
+            {
+                reunion.Ecran = dto.Ecran ?? false;
+                reunion.Camera = dto.Camera ?? false;
+                reunion.TableauBlanc = dto.TableauBlanc ?? false;
+                reunion.SystemeAudio = dto.SystemeAudio ?? false;
+            }
+            else if (salle is SallePause pause)
+            {
+                pause.MicroOndes = dto.MicroOndes ?? 0;
+                pause.Frigo = dto.Frigo ?? false;
+                pause.Evier = dto.Evier ?? 0;
+                pause.Distributeur = dto.Distributeur ?? false;
+            }
+            else if (salle is SalleBubble bubble)
+            {
+                bubble.PriseElectrique = dto.PriseElectrique ?? false;
+            }
 
             await _salleRepository.UpdateAsync(salle);
             await _salleRepository.SaveChangesAsync();

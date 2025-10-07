@@ -1,9 +1,17 @@
-# 🚀 Migration Service Layer - SalleService
+# ✅ Migration ViewModels vers ISalleService - TERMINÉE
 
-**Date**: 6 octobre 2025  
-**Auteur**: GitHub Copilot  
-**Ticket**: Architecture Onion - Service Layer Pattern  
+**Date d'implémentation** : 7 octobre 2025  
+**Durée** : ~1 heure  
+**Statut** : ✅ **COMPLÉTÉE avec succès**  
 **Branche**: IA
+
+---
+
+## 🎯 Objectif
+
+Finaliser la migration vers la couche Service Layer en remplaçant l'accès direct à `IRepository<Salle>` par `ISalleService` dans tous les ViewModels, complétant ainsi l'architecture Onion.
+
+**MISE À JOUR** : Ce document a été créé le 6 octobre avec ISalleService et SalleService, mais les ViewModels ne l'utilisaient pas encore. Aujourd'hui (7 octobre), la migration est **100% terminée** !
 
 ---
 

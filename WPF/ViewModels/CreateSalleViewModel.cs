@@ -10,8 +10,8 @@ namespace WPF.ViewModels
 {
     public class CreateSalleViewModel : BaseViewModel
     {
-        private readonly IRepository<Salle> _salleRepository;
-        private readonly IRepository<Etage> _etageRepository;
+        private readonly ISalleService _salleService;
+        private readonly IEtageService _etageService;
         private readonly IDialogService _dialogService;
         private readonly IImageService _imageService;
 
@@ -171,13 +171,13 @@ namespace WPF.ViewModels
         public ICommand CancelCommand { get; }
 
         public CreateSalleViewModel(
-            IRepository<Salle> salleRepository,
-            IRepository<Etage> etageRepository,
+            ISalleService salleService,
+            IEtageService etageService,
             IDialogService dialogService,
             IImageService imageService)
         {
-            _salleRepository = salleRepository;
-            _etageRepository = etageRepository;
+            _salleService = salleService;
+            _etageService = etageService;
             _dialogService = dialogService;
             _imageService = imageService;
 
@@ -193,10 +193,8 @@ namespace WPF.ViewModels
         {
             try
             {
-                // Utilisation de GetQueryable() pour ajouter OrderBy
-                var etages = await _etageRepository.GetQueryable()
-                    .OrderBy(e => e.Niveau)
-                    .ToListAsync();
+                // Utilisation du service (tri automatique par Niveau intégré)
+                var etages = await _etageService.GetAllEtagesAsync();
                 
                 Etages = new ObservableCollection<Etage>(etages);
             }
@@ -240,73 +238,53 @@ namespace WPF.ViewModels
                         savedImagePath = saved;
                 }
 
-                Salle salle = SelectedTypeSalle switch
+                // Création du DTO avec toutes les propriétés
+                var dto = new CreateSalleDto
                 {
-                    TypeSalle.Reunion => new SalleReunion
-                    {
-                        Numero = Numero,
-                        Nom = Nom,
-                        EtageId = SelectedEtage.Id,
-                        ImgSallePath = savedImagePath,
-                        TypeSalle = SelectedTypeSalle,
-                        CoordonneeX = CoordonneeX,
-                        CoordonneeY = CoordonneeY,
-                        NbTables = NbTables,
-                        NbPlaces = NbPlaces,
-                        Ecran = Ecran,
-                        Camera = Camera,
-                        TableauBlanc = TableauBlanc,
-                        SystemeAudio = SystemeAudio
-                    },
-                    TypeSalle.Pause => new SallePause
-                    {
-                        Numero = Numero,
-                        Nom = Nom,
-                        EtageId = SelectedEtage.Id,
-                        ImgSallePath = savedImagePath,
-                        TypeSalle = SelectedTypeSalle,
-                        CoordonneeX = CoordonneeX,
-                        CoordonneeY = CoordonneeY,
-                        NbTables = NbTables,
-                        NbPlaces = NbPlaces,
-                        MicroOndes = MicroOndes,
-                        Frigo = Frigo,
-                        Evier = Evier,
-                        Distributeur = Distributeur
-                    },
-                    TypeSalle.Bubble => new SalleBubble
-                    {
-                        Numero = Numero,
-                        Nom = Nom,
-                        EtageId = SelectedEtage.Id,
-                        ImgSallePath = savedImagePath,
-                        TypeSalle = SelectedTypeSalle,
-                        CoordonneeX = CoordonneeX,
-                        CoordonneeY = CoordonneeY,
-                        NbTables = NbTables,
-                        NbPlaces = NbPlaces,
-                        PriseElectrique = PriseElectrique
-                    },
-                    _ => new Salle
-                    {
-                        Numero = Numero,
-                        Nom = Nom,
-                        EtageId = SelectedEtage.Id,
-                        ImgSallePath = savedImagePath,
-                        TypeSalle = SelectedTypeSalle,
-                        CoordonneeX = CoordonneeX,
-                        CoordonneeY = CoordonneeY,
-                        NbTables = NbTables,
-                        NbPlaces = NbPlaces
-                    }
+                    Numero = Numero,
+                    Nom = Nom,
+                    EtageId = SelectedEtage.Id,
+                    ImgSallePath = savedImagePath,
+                    TypeSalle = SelectedTypeSalle,
+                    CoordonneeX = CoordonneeX,
+                    CoordonneeY = CoordonneeY,
+                    NbTables = NbTables,
+                    NbPlaces = NbPlaces,
+                    Favori = false,
+                    
+                    // Propriétés SalleReunion
+                    Ecran = Ecran,
+                    Camera = Camera,
+                    TableauBlanc = TableauBlanc,
+                    SystemeAudio = SystemeAudio,
+                    
+                    // Propriétés SallePause
+                    MicroOndes = MicroOndes,
+                    Frigo = Frigo,
+                    Evier = Evier,
+                    Distributeur = Distributeur,
+                    
+                    // Propriétés SalleBubble
+                    PriseElectrique = PriseElectrique
                 };
 
-                await _salleRepository.AddAsync(salle);
-                await _salleRepository.SaveChangesAsync();
+                // Utilisation du service (logique métier déléguée)
+                var salle = await _salleService.CreateSalleAsync(dto);
 
-                _dialogService.ShowInformation("Succès", "Salle créée avec succès !");
+                _dialogService.ShowInformation("Succès", 
+                    $"Salle '{salle.Nom}' (n°{salle.Numero}) créée avec succès !");
                 
                 Cancel();
+            }
+            catch (InvalidOperationException ex)
+            {
+                // Erreur métier (numéro déjà existant, étage inexistant, etc.)
+                _dialogService.ShowError("Règle métier", ex.Message);
+            }
+            catch (ArgumentException ex)
+            {
+                // Erreur de validation
+                _dialogService.ShowError("Validation", ex.Message);
             }
             catch (Exception ex)
             {
